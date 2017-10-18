@@ -1,0 +1,66 @@
+version: '2'
+services:
+  zookeeper:
+    image: debezium/zookeeper:0.6
+    ports:
+     - 2181:2181
+     - 2888:2888
+     - 3888:3888
+  kafka:
+    image: debezium/kafka:0.6
+    ports:
+     - 9092:9092
+    links:
+     - zookeeper
+    environment:
+     - ZOOKEEPER_CONNECT=zookeeper:2181
+     - KAFKA_BROKER_ID=1
+     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:32181
+     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092
+     - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+  postgres:
+    image: debezium/example-postgres:0.6
+    ports:
+     - 5432:5432
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+  connect:
+    image: debezium/connect:0.6
+    ports:
+     - 8083:8083
+    links:
+     - kafka
+     - postgres
+     - registry
+    environment:
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=my_connect_configs
+     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+     - KEY_CONVERTER=io.confluent.connect.avro.AvroConverter
+     - VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
+     - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+     - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+     - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://registry:8081
+     - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://registry:8081
+  registry:
+    image: confluentinc/cp-schema-registry:3.3.0
+    ports:
+      - 8081:8081
+    links:
+      - kafka
+      - zookeeper
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+      - SCHEMA_REGISTRY_HOST_NAME=registry
+      - SCHEMA_REGISTRY_LISTENERS=http://registry:8081
+  beam:
+    image: maven:3.5-jdk-8
+    command: mvn -X compile exec:java -Dexec.mainClass=org.apache.beam.examples.KafkaExample -Pdirect-runner
+    volumes:
+      - .:/usr/src/kafka
+      - $HOME/.m2:/root/.m2
+    working_dir: /usr/src/kafka
+    links:
+      - kafka

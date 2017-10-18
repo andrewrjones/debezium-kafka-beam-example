@@ -1,0 +1,6 @@
+.idea
+*iml
+target
+src/main/java/dbserver1/
+src/main/java/io/
+wordcount*
