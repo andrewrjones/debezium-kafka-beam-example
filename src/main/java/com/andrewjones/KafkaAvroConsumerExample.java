@@ -1,23 +1,15 @@
 package com.andrewjones;
 
 import com.google.common.collect.ImmutableMap;
-import dbserver1.inventory.customers.Envelope;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.beam.sdk.Pipeline;
-import org.apache.beam.sdk.coders.AvroCoder;
-import org.apache.beam.sdk.coders.ByteArrayCoder;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.KV;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
-import org.apache.kafka.common.serialization.ByteBufferDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class KafkaAvroConsumerExample {
     public static void main(String[] args) {
