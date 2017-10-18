@@ -44,6 +44,9 @@ compile:
 consumer:
 	docker-compose run beam mvn compile exec:java -Dexec.mainClass=com.andrewjones.KafkaAvroConsumerExample -P$(RUNNER)
 
+bconsumer:
+	docker-compose run beam mvn compile exec:java -Dexec.mainClass=com.andrewjones.KafkaAvroConsumerBytesExample -P$(RUNNER)
+
 clean: clean-docker clean-files
 
 clean-docker:
