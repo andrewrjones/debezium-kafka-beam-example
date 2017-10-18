@@ -1,8 +1,10 @@
 package com.andrewjones;
 
 import com.google.common.collect.ImmutableMap;
+import dbserver1.inventory.customers.Envelope;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.beam.sdk.Pipeline;
+import org.apache.beam.sdk.coders.AvroCoder;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
 import org.apache.beam.sdk.options.PipelineOptions;
@@ -21,7 +23,21 @@ public class KafkaAvroConsumerExample {
                 .withBootstrapServers("kafka:9092")
                 .withTopic("dbserver1.inventory.customers")
                 .withKeyDeserializer(StringDeserializer.class)
+                /*
+                 * Using just the KafkaAvroDeserializer fails with:
+                 * Caused by: java.lang.RuntimeException: Unable to automatically infer a Coder for the Kafka
+                 * Deserializer class io.confluent.kafka.serializers.KafkaAvroDeserializer: no coder registered for
+                 * type class java.lang.Object
+                 */
                 .withValueDeserializer(KafkaAvroDeserializer.class)
+
+                /*
+                 * Using this and changing to KafkaIO.<String, Envelope>read() does not compile with:
+                 * Compilation failure
+                 * [ERROR] /usr/src/kafka/src/main/java/com/andrewjones/KafkaAvroConsumerExample.java:[36,58]
+                 * incompatible types: java.lang.Class<io.confluent.kafka.serializers.KafkaAvroDeserializer> cannot be
+                 * converted to java.lang.Class<? extends org.apache.kafka.common.serialization.Deserializer<dbserver1.inventory.customers.Envelope>>
+                 */
 //                .withValueDeserializerAndCoder(KafkaAvroDeserializer.class, AvroCoder.of(Envelope.class))
 
                 .updateConsumerProperties(ImmutableMap.of("auto.offset.reset", (Object)"earliest"))
