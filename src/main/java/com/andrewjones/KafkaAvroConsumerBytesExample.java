@@ -30,8 +30,6 @@ public class KafkaAvroConsumerBytesExample {
     static {
         final Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                io.confluent.kafka.serializers.KafkaAvroSerializer.class);
         props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://registry:8081");
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
         VerifiableProperties vProps = new VerifiableProperties(props);
