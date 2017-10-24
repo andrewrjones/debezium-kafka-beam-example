@@ -21,7 +21,8 @@ import java.util.Properties;
 
 /**
  * This works, although we are parsing the Avro ourselves, which is a little ugly...
- * Would rather have KafkaAvroExample work!
+ * KafkaAvroConsumerExtendsExample is better.
+ * Would be best if I could have KafkaAvroExample work.
  */
 public class KafkaAvroConsumerBytesExample {
     // This static initialization block creates an instance of the decoder per JVM
