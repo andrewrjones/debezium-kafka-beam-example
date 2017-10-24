@@ -57,7 +57,7 @@ services:
       - SCHEMA_REGISTRY_LISTENERS=http://registry:8081
   beam:
     image: maven:3.5-jdk-8
-    command: mvn -X compile exec:java -Dexec.mainClass=org.apache.beam.examples.KafkaExample -Pdirect-runner
+    command: mvn compile
     volumes:
       - .:/usr/src/kafka
       - $HOME/.m2:/root/.m2
