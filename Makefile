@@ -19,10 +19,10 @@ down:
 	docker-compose down
 
 register:
-	curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://$(CONNECT)/connectors/ -d @register-postgres.json | jq
+	curl -s -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://$(CONNECT)/connectors/ -d @register-postgres.json | jq
 
 describe:
-	docker-compose exec kafka bin/kafka-topics.sh --describe --topic $(TOPIC) --zookeeper $(ZOOKEEPER)
+	docker-compose exec kafka bin/kafka-topics.sh --describe --zookeeper $(ZOOKEEPER)
 
 offset:
 	docker-compose exec kafka bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list $(KAFKA) --topic $(TOPIC) --time -1
