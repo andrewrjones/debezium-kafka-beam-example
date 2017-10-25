@@ -15,6 +15,8 @@ The following data is in Postgres: https://github.com/debezium/docker-images/blo
 * Ensure data in topic
     * `make offset`
     * `make dump`
+* Ensure Avro schemas have been created
+    * Open http://localhost:8000 in your browser
 * Download Avro schema. Saves it to `src/main/avro` and will be compiled with Maven
     * `make schema`
 * Compile Avro schema

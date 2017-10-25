@@ -55,6 +55,14 @@ services:
       - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
       - SCHEMA_REGISTRY_HOST_NAME=registry
       - SCHEMA_REGISTRY_LISTENERS=http://registry:8081
+      - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,PUT,OPTIONS
+      - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN=*
+  registry-ui:
+    image: landoop/schema-registry-ui
+    ports:
+      - 8000:8000
+    environment:
+      - SCHEMAREGISTRY_URL=http://localhost:8081
   beam:
     image: maven:3.5-jdk-8
     command: mvn compile
